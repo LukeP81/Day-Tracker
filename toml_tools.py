@@ -116,7 +116,7 @@ class TomlTools:
 
     @classmethod
     def get_progress(cls) -> int:
-        return toml.load("progress.toml").get("multiplier", 0)
+        return toml.load("progress.toml").get("progress", 0)
 
     @classmethod
     def set_progress(cls):
