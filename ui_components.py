@@ -46,8 +46,8 @@ class UiComponents:
 
     @classmethod
     def create_objective_forms(cls, section: str):
-        special = toml.load("app/constant.toml")["Special"]
-        actions = toml.load("app/current.toml")[section]
+        special = toml.load("constant.toml")["Special"]
+        actions = toml.load("current.toml")[section]
         for action in list(actions.keys()):
             objective_types = {
                 "basic": BasicObjective,
@@ -73,7 +73,7 @@ class UiComponents:
     @st.experimental_memo
     def get_data(cls, file_date: str):
         file_date.title()  # used for separating caching
-        with open("app/current.toml", "r") as file:
+        with open("current.toml", "r") as file:
             return file.read()
 
     @classmethod
