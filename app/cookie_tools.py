@@ -17,6 +17,9 @@ class CookieTools:
 
     @classmethod
     def verify_password_cookie(cls) -> bool:
+        # pylint: disable=(unsupported-membership-test)
+        # pylint: disable=(unsubscriptable-object))
+
         if "password" in cls._COOKIES:
             if cls._COOKIES["password"] == st.secrets["password"]:
                 return True
@@ -24,5 +27,6 @@ class CookieTools:
 
     @classmethod
     def set_password_cookie(cls, password: str):
+        # pylint: disable=(unsupported-assignment-operation)
         cls._COOKIES["password"] = password
         cls._COOKIES.save()
