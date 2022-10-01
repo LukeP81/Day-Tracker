@@ -5,9 +5,9 @@ import numpy as np
 import streamlit as st
 import toml
 
-from app.toml_tools import TomlTools
-from app.objectives import BasicObjective, WriteObjective, PlanObjective
-from app.cookie_tools import CookieTools
+from toml_tools import TomlTools
+from objectives import BasicObjective, WriteObjective, PlanObjective
+from cookie_tools import CookieTools
 
 
 class UiComponents:

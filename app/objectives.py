@@ -1,6 +1,6 @@
 import streamlit as st
 
-from app.toml_tools import TomlTools
+from toml_tools import TomlTools
 
 
 class BasicObjective:
