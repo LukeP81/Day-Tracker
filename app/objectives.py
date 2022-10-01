@@ -78,8 +78,8 @@ class PlanObjective(BasicObjective):
         if submit:
             TomlTools.set_action_value(section=self._section, name=self._name,
                                        value=1)
-            created_tasks = list(set([
-                task for task in entered.split("\n") if task])
-            )
+            created_tasks = list(
+                {task for task in entered.split("\n") if task})
+
             TomlTools.set_planned_values(task_list=created_tasks)
             st.experimental_rerun()

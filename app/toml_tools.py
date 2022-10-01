@@ -54,7 +54,7 @@ class TomlTools:
     @classmethod
     def get_flat_current_values(cls) -> list:
 
-        def extract_nested_values(it):
+        def extract_nested_values(it):  # pylint:disable=invalid-name
             # https://stackoverflow.com/questions/46845464/cleaner-way-to-unpack-nested-dictionaries
             if isinstance(it, list):
                 for sub_it in it:
