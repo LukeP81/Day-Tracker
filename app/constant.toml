@@ -1,0 +1,68 @@
+morning = [
+    "Hydrate",
+    "Make Bed",
+    "Hang",
+    "Face Pulls",
+    "Stretches",
+    "Breathing",
+    "Breakfast",
+    "Teeth",
+    "Mental Exercise",
+    "Nature"
+]
+
+evening = [
+    "Temperature",
+    "Teeth",
+    "Passage",
+    "Plan",
+    "Audio",
+    "Preparation",
+    "Stretches",
+    "Environment"
+]
+
+[Monday]
+food = ["Chicken", "Chilli"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Tuesday]
+food = ["Chicken", "Spaghetti"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Wednesday]
+food = ["Chicken", "Chicken-Cooking"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Thursday]
+food = ["Chicken", "Chilli"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Friday]
+food = ["Chicken", "Spaghetti"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Saturday]
+food = ["Chicken", "Chilli - Cooking"]
+general = [
+    "Work", "Guitar", "Racing"
+]
+
+[Sunday]
+food = ["Spaghetti - Cooking", "Chicken-Cooking"]
+general = [
+    "Laundry", "Work", "Guitar", "Racing"
+]
+[Special]
+Breathing = ["w", "[Youtube](https://www.youtube.com/watch?v=tybOi4hjZFQ 'Breathing Exercise')"]
+Plan=["p"]
