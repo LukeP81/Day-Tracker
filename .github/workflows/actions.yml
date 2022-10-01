@@ -23,4 +23,4 @@ jobs:
         flake8 . --count --exit-zero --show-source --statistics
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint

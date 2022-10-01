@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
+import time
 
 import numpy as np
 import streamlit as st
 import toml
-import time
 
 from app.toml_tools import TomlTools
 from app.objectives import BasicObjective, WriteObjective, PlanObjective
