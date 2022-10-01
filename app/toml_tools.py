@@ -22,7 +22,7 @@ class TomlTools:
             returning_dict = {}
             for action in action_list:
                 key = action.replace(" ", "_")
-                returning_dict[key] = "None"  # Can't use None as toml won't use the key
+                returning_dict[key] = "None"  # Toml won't work with None
             return returning_dict
 
         # create dicts from constant actions

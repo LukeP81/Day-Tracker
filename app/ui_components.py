@@ -83,9 +83,12 @@ class UiComponents:
 
         filename_date = date.replace("/", ",")
 
-        st.download_button(label="Download Log", data=cls.get_data(filename_date),
-                           file_name=f"log_{filename_date}.toml", mime="application/toml",
+        st.download_button(label="Download Log",
+                           data=cls.get_data(filename_date),
+                           file_name=f"log_{filename_date}.toml",
+                           mime="application/toml",
                            key="downloader", on_click=downloading, )
+
         if st.session_state.get("downloading", False):
             with st.spinner(text="Generating log"):
                 time.sleep(1)
@@ -101,7 +104,8 @@ class UiComponents:
         with st.expander(label="Morning"):
             cls.create_objective_forms("morning")
         with st.expander(label="Specific"):
-            general_tab, food_tab, planned_tab = st.tabs(["General", "Food", "Planned"])
+            general_tab, food_tab, planned_tab = st.tabs(
+                ["General", "Food", "Planned"])
             with general_tab:
                 cls.create_objective_forms("general")
             with food_tab:
@@ -123,7 +127,12 @@ class UiComponents:
         if st.session_state.get("downloaded", False):
             st.session_state["downloaded"] = False
             TomlTools.set_progress()
-            file_datetime = datetime.strptime(file_date, "%d/%m/%Y") + timedelta(days=1, hours=12)  # avoid bst errors
+            file_datetime = datetime.strptime(
+                file_date, "%d/%m/%Y"
+            ) + timedelta(
+                days=1,
+                hours=12  # avoid bst errors
+            )
             new_date = (file_datetime.strftime("%d/%m/%Y"))
             new_day = file_datetime.strftime("%A")
             TomlTools.create_current(day=new_day, date=new_date)

@@ -41,7 +41,8 @@ class BasicObjective:
         }
         with message:
             message_dict[self._value](self._name)
-        perform_undo = undo.button(label="Undo", key=f"undo_{self._section}_{self._name}")
+        perform_undo = undo.button(label="Undo",
+                                   key=f"undo_{self._section}_{self._name}")
         if perform_undo:
             TomlTools.set_action_value(section=self._section, name=self._name,
                                        value="None")
@@ -70,12 +71,15 @@ class PlanObjective(BasicObjective):
             st.subheader(self._name)
             current_planned = TomlTools.get_planned_values()
             planned_string = "\n".join(current_planned)
-            entered = st.text_area(label="Tomorrow's tasks", value=planned_string)
+            entered = st.text_area(label="Tomorrow's tasks",
+                                   value=planned_string)
             submit = st.form_submit_button(label="Actioned")
 
         if submit:
             TomlTools.set_action_value(section=self._section, name=self._name,
                                        value=1)
-            created_tasks = list(set([task for task in entered.split("\n") if task]))
+            created_tasks = list(set([
+                task for task in entered.split("\n") if task])
+            )
             TomlTools.set_planned_values(task_list=created_tasks)
             st.experimental_rerun()
