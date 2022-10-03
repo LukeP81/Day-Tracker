@@ -9,14 +9,38 @@ import toml
 
 from toml_tools import TomlTools
 from objectives import BasicObjective, WriteObjective, PlanObjective
-from cookie_tools import CookieTools
 
 
 class UiComponents:
     """Class containing useful UI functions"""
 
     @classmethod
-    def color_config(cls, current_score: int, total_score: int):
+    def _value_display(cls):
+        """Method for displaying the UI for the value"""
+
+        def value_as_string():
+            """Function for returning a value as a string"""
+
+            if value > 10:
+                return f"{round(value, 2)}x"
+
+            else:
+                return f"{round(value * 100, 2)}%"
+
+        def delta_as_string():
+            """Function for returning a value as a string"""
+
+            return f"{round(delta * 100, 2)}%"
+
+        toml_data = TomlTools.get_progress()
+        value = toml_data.get("progress", 0)
+        delta = toml_data.get("delta", 0)
+        st.metric(label="Value",
+                  value=value_as_string(),
+                  delta=delta_as_string())
+
+    @classmethod
+    def _color_config(cls, current_score: int, total_score: int):
         """Method for setting the primary color of the theme"""
 
         # sort colours
@@ -42,19 +66,19 @@ class UiComponents:
             st.experimental_rerun()
 
     @classmethod
-    def score_display(cls):
-        """Method for displaying the score"""
+    def _score_display(cls):
+        """Method for displaying the UI for the score"""
 
         current_score = TomlTools.get_score()
-        total_score = len(TomlTools.get_flat_current_values())
+        total_score = len(TomlTools._get_flat_current_values())
         st.slider(label="Score",
                   min_value=-total_score, max_value=total_score,
                   value=current_score)
-        cls.color_config(current_score=current_score, total_score=total_score)
+        cls._color_config(current_score=current_score, total_score=total_score)
 
     @classmethod
-    def create_objective_forms(cls, section: str):
-        """Method for creating the task forms"""
+    def _create_objective_forms(cls, section: str):
+        """Method for displaying the UI for the task forms"""
 
         special = toml.load("constant.toml")["Special"]
         actions = toml.load("current.toml")[section]
@@ -81,7 +105,7 @@ class UiComponents:
 
     @classmethod
     @st.experimental_memo
-    def get_data(cls, file_date: str):
+    def _get_data(cls, file_date: str):
         """Method for getting the data from current.toml"""
 
         file_date.title()  # used for separating caching
@@ -89,8 +113,8 @@ class UiComponents:
             return file.read()
 
     @classmethod
-    def finish_day_display(cls, date: str):
-        """Method for the UI after a day has finished"""
+    def _finish_day_display(cls, date: str):
+        """Method for displaying the UI after a day has finished"""
 
         def downloading():
             st.session_state["downloading"] = True
@@ -98,7 +122,7 @@ class UiComponents:
         filename_date = date.replace("/", ",")
 
         st.download_button(label="Download Log",
-                           data=cls.get_data(filename_date),
+                           data=cls._get_data(filename_date),
                            file_name=f"log_{filename_date}.toml",
                            mime="application/toml",
                            key="downloader", on_click=downloading, )
@@ -111,29 +135,31 @@ class UiComponents:
             st.experimental_rerun()
 
     @classmethod
-    def same_day_display(cls, day: str, date: str):
-        """Method for the UI if the day is the same as the previous run"""
+    def _same_day_display(cls, day: str, date: str):
+        """Method for displaying the UI if the day
+        is the same as the previous run"""
 
         st.title(f"{day} {date}")
-        st.subheader(f"Value: {TomlTools.get_progress()}")
-        cls.score_display()
+        cls._value_display()
+        cls._score_display()
         with st.expander(label="Morning"):
-            cls.create_objective_forms("morning")
+            cls._create_objective_forms("morning")
         with st.expander(label="Specific"):
             general_tab, food_tab, planned_tab = st.tabs(
                 ["General", "Food", "Planned"])
             with general_tab:
-                cls.create_objective_forms("general")
+                cls._create_objective_forms("general")
             with food_tab:
-                cls.create_objective_forms("food")
+                cls._create_objective_forms("food")
             with planned_tab:
-                cls.create_objective_forms("planned")
+                cls._create_objective_forms("planned")
         with st.expander(label="Evening"):
-            cls.create_objective_forms("evening")
+            cls._create_objective_forms("evening")
 
     @classmethod
-    def different_day_display(cls, current_day: str, current_date: str):
-        """Method for the UI if the day is different to the previous run"""
+    def _different_day_display(cls, current_day: str, current_date: str):
+        """Method for displaying the UI if the day
+        is different to the previous run"""
 
         file_date = TomlTools.get_date()
 
@@ -160,27 +186,16 @@ class UiComponents:
         TomlTools.set_all_action_values(value=-1)
         st.title(f"Log date: {file_date}")
         st.title(f"Current date: {current_date}")
-        cls.finish_day_display(date=file_date)
+        cls._finish_day_display(date=file_date)
 
     @classmethod
-    def logged_in_display(cls):
-        """Method for the UI if the user is logged in"""
+    def display(cls):
+        """Method for displaying the UI if the user is logged in"""
 
         day = (datetime.now().strftime("%A"))
         date = (datetime.now().strftime("%d/%m/%Y"))
         same_day = TomlTools.check_date(date=date)
         if same_day:
-            cls.same_day_display(day=day, date=date)
+            cls._same_day_display(day=day, date=date)
         else:
-            cls.different_day_display(current_day=day, current_date=date)
-
-    @classmethod
-    def logged_out_display(cls):
-        """Method for the UI if the user is logged out"""
-
-        with st.form(key="Login details"):
-            password = st.text_input(label="Password", type="password",
-                                     placeholder="Enter password here")
-            submit = st.form_submit_button()
-            if submit:
-                CookieTools.set_password_cookie(password=password)
+            cls._different_day_display(current_day=day, current_date=date)

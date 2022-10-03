@@ -63,7 +63,7 @@ class TomlTools:
             toml.dump(current_dict, file)
 
     @classmethod
-    def get_flat_current_values(cls) -> list:
+    def _get_flat_current_values(cls) -> list:
         """Method for returning a flat list of all current.toml tasks"""
 
         def extract_nested_values(it):  # pylint:disable=invalid-name
@@ -87,11 +87,17 @@ class TomlTools:
         """Method for getting the score from current.toml"""
 
         score = 0
-        values = cls.get_flat_current_values()
+        values = cls._get_flat_current_values()
         for value in values:
             if value != "None":
                 score += int(value)
         return score
+
+    @classmethod
+    def get_total_score(cls) -> int:
+        """Method for getting the total score"""
+
+        return len(cls._get_flat_current_values())
 
     @classmethod
     def get_action_value(cls, section: str, name: str) -> Union[int, str]:
@@ -139,19 +145,21 @@ class TomlTools:
             toml.dump(toml_data, file)
 
     @classmethod
-    def get_progress(cls) -> int:
+    def get_progress(cls) -> dict:
         """Method for getting the progress value from progress.toml"""
 
-        return toml.load("progress.toml").get("progress", 0)
+        return toml.load("progress.toml")
 
     @classmethod
     def set_progress(cls):
         """Method for setting the progress value in progress.toml"""
 
         score = cls.get_score()
-        total_score = len(cls.get_flat_current_values())
-        multiplier = 1 + (0.01 * (score / total_score))
+        total_score = len(cls._get_flat_current_values())
+        percent_change = (0.01 * (score / total_score))
+        multiplier = 1 + percent_change
         toml_data = toml.load("progress.toml")
         toml_data["progress"] *= multiplier
+        toml_data["delta"] = percent_change
         with open(file="progress.toml", mode="w", encoding="utf-8") as file:
             toml.dump(toml_data, file)

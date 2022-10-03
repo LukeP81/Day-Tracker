@@ -1,0 +1,35 @@
+date = "03/10/2022"
+tomorrow = []
+
+[morning]
+Hydrate = "None"
+Make_Bed = "None"
+Hang = "None"
+Face_Pulls = "None"
+Stretches = "None"
+Breathing = "None"
+Breakfast = "None"
+Teeth = "None"
+Mental_Exercise = "None"
+Nature = "None"
+
+[evening]
+Temperature = "None"
+Teeth = "None"
+Passage = "None"
+Plan = "None"
+Audio = "None"
+Preparation = "None"
+Stretches = "None"
+Environment = "None"
+
+[general]
+Work = "None"
+Guitar = "None"
+Racing = "None"
+
+[food]
+Chicken = "None"
+Chilli = "None"
+
+[planned]
