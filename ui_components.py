@@ -36,7 +36,8 @@ class UiComponents:
         current_settings = toml.load(".streamlit/config.toml")
         if current_settings["theme"]["primaryColor"] != colour:
             current_settings["theme"]["primaryColor"] = colour
-            with open(".streamlit/config.toml", "w") as file:
+            with open(file=".streamlit/config.toml", mode="w",
+                      encoding="utf-8") as file:
                 toml.dump(current_settings, file)
             st.experimental_rerun()
 
@@ -84,7 +85,7 @@ class UiComponents:
         """Method for getting the data from current.toml"""
 
         file_date.title()  # used for separating caching
-        with open("current.toml", "r") as file:
+        with open(file="current.toml", mode="r", encoding="utf-8") as file:
             return file.read()
 
     @classmethod

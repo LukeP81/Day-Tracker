@@ -5,6 +5,7 @@ import streamlit as st
 from toml_tools import TomlTools
 
 
+# pylint: disable=too-few-public-methods
 class BasicObjective:
     """Basic class for housing a task"""
 
@@ -20,8 +21,6 @@ class BasicObjective:
         included here so the _to_do_display does not need to be
         rewritten when subclassing
         """
-
-        pass
 
     def _to_do_display(self):
         """Private method for displaying a task yet to be done"""
@@ -72,6 +71,7 @@ class BasicObjective:
             self._done_display()
 
 
+# pylint: disable=too-few-public-methods
 class WriteObjective(BasicObjective):
     """Class for housing a task that will contain an extra bit of text
     underneath the name
@@ -91,6 +91,7 @@ class WriteObjective(BasicObjective):
         st.write(self._to_write)
 
 
+# pylint: disable=too-few-public-methods
 class PlanObjective(BasicObjective):
     """Class for housing a task that will contain a text area for
     entering a list of values underneath the name

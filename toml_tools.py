@@ -46,7 +46,7 @@ class TomlTools:
         # create dicts from planned actions, then wipe planned actions
         actions = toml.load("planned.toml")
         planned_dict = list_to_dict(action_list=actions["tasks"])
-        with open("planned.toml", "w") as file:
+        with open(file="planned.toml", mode="w", encoding="utf-8") as file:
             toml.dump({"tasks": []}, file)
 
         # place dicts into toml file
@@ -59,7 +59,7 @@ class TomlTools:
             "food": food_dict,
             "planned": planned_dict,
         }
-        with open("current.toml", "w") as file:
+        with open(file="current.toml", mode="w", encoding="utf-8") as file:
             toml.dump(current_dict, file)
 
     @classmethod
@@ -106,7 +106,7 @@ class TomlTools:
 
         dicts = toml.load("current.toml")
         dicts[section][name] = value
-        with open("current.toml", "w") as file:
+        with open(file="current.toml", mode="w", encoding="utf-8") as file:
             toml.dump(dicts, file)
 
     @classmethod
@@ -120,7 +120,7 @@ class TomlTools:
                     if toml_data[section][action] == "None":
                         toml_data[section][action] = value
 
-        with open("current.toml", "w") as file:
+        with open(file="current.toml", mode="w", encoding="utf-8") as file:
             toml.dump(toml_data, file)
 
     @classmethod
@@ -135,7 +135,7 @@ class TomlTools:
 
         toml_data = toml.load("planned.toml")
         toml_data["tasks"] = task_list
-        with open("planned.toml", "w") as file:
+        with open(file="planned.toml", mode="w", encoding="utf-8") as file:
             toml.dump(toml_data, file)
 
     @classmethod
@@ -153,5 +153,5 @@ class TomlTools:
         multiplier = 1 + (0.01 * (score / total_score))
         toml_data = toml.load("progress.toml")
         toml_data["progress"] *= multiplier
-        with open("progress.toml", "w") as file:
+        with open(file="progress.toml", mode="w", encoding="utf-8") as file:
             toml.dump(toml_data, file)
