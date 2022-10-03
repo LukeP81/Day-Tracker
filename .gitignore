@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /.streamlit/secrets.toml
+/.idea/.gitignore
+/.idea/Day-Tracker.iml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml

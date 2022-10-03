@@ -1,7 +1,7 @@
 import streamlit as st
 
-from app.cookie_tools import CookieTools
-from app.ui_components import UiComponents
+from cookie_tools import CookieTools
+from ui_components import UiComponents
 
 st.set_page_config(page_title="Day Tracker", page_icon="🗓️", layout="centered")
 CookieTools.setup_cookies()
