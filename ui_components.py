@@ -11,6 +11,7 @@ from toml_tools import TomlTools
 from objectives import BasicObjective, WriteObjective, PlanObjective
 
 
+# pylint: disable=too-few-public-methods
 class UiComponents:
     """Class containing useful UI functions"""
 
@@ -24,8 +25,7 @@ class UiComponents:
             if value > 10:
                 return f"{round(value, 2)}x"
 
-            else:
-                return f"{round(value * 100, 2)}%"
+            return f"{round(value * 100, 2)}%"
 
         def delta_as_string():
             """Function for returning a value as a string"""
