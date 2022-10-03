@@ -19,25 +19,28 @@ class UiComponents:
     def _value_display(cls):
         """Method for displaying the UI for the value"""
 
-        def value_as_string():
+        def value_as_string(val):
             """Function for returning a value as a string"""
 
-            if value > 10:
-                return f"{round(value, 2)}x"
+            return f"{round(val, 2)}x" if val > 10 else f"{round(val * 100, 2)}%"
 
-            return f"{round(value * 100, 2)}%"
-
-        def delta_as_string():
+        def delta_as_string(val):
             """Function for returning a value as a string"""
 
-            return f"{round(delta * 100, 2)}%"
+            return f"{round(val * 100, 2)}%"
 
-        toml_data = TomlTools.get_progress()
-        value = toml_data.get("progress", 0)
-        delta = toml_data.get("delta", 0)
-        st.metric(label="Value",
-                  value=value_as_string(),
-                  delta=delta_as_string())
+        current_value, current_delta = TomlTools.get_current_progress()
+        new_value, new_delta = TomlTools.get_new_progress()
+
+        current_col, new_col = st.columns(2)
+        with current_col:
+            st.metric(label="Start Value",
+                      value=value_as_string(current_value),
+                      delta=delta_as_string(current_delta))
+        with new_col:
+            st.metric(label="Current Value",
+                      value=value_as_string(new_value),
+                      delta=delta_as_string(new_delta))
 
     @classmethod
     def _color_config(cls, current_score: int, total_score: int):

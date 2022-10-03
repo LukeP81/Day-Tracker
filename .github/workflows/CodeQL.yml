@@ -19,7 +19,7 @@ jobs:
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --exit-zero --show-source --statistics
+        flake8 . --count --exit-zero --show-source --statistics --max-line-length 82
     - name: Lint with pylint
       run: |
         pylint $(git ls-files '*.py')

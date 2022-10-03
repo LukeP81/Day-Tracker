@@ -1,6 +1,6 @@
 """Module for most things toml related"""
 
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Tuple
 
 import toml
 
@@ -145,21 +145,32 @@ class TomlTools:
             toml.dump(toml_data, file)
 
     @classmethod
-    def get_progress(cls) -> dict:
-        """Method for getting the progress value from progress.toml"""
+    def get_current_progress(cls) -> Tuple[float, float]:
+        """Method for getting the current progress value from progress.toml"""
+        toml_data = toml.load("progress.toml")
+        current_value = toml_data.get("progress", 0)
+        current_delta = toml_data.get("delta", 0)
+        return current_value, current_delta
 
-        return toml.load("progress.toml")
+    @classmethod
+    def get_new_progress(cls) -> Tuple[float, float]:
+        """Method for creating the new progress value using the score"""
+
+        score = cls.get_score()
+        total_score = len(cls._get_flat_current_values())
+        new_delta = (0.01 * (score / total_score))
+        multiplier = 1 + new_delta
+        current_value, _ = cls.get_current_progress()
+        new_value = current_value * multiplier
+        return new_value, new_delta
 
     @classmethod
     def set_progress(cls):
         """Method for setting the progress value in progress.toml"""
 
-        score = cls.get_score()
-        total_score = len(cls._get_flat_current_values())
-        percent_change = (0.01 * (score / total_score))
-        multiplier = 1 + percent_change
+        new_value, percent_change = cls.get_new_progress()
         toml_data = toml.load("progress.toml")
-        toml_data["progress"] *= multiplier
+        toml_data["progress"] = new_value
         toml_data["delta"] = percent_change
         with open(file="progress.toml", mode="w", encoding="utf-8") as file:
             toml.dump(toml_data, file)

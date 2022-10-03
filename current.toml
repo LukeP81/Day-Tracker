@@ -3,15 +3,14 @@ tomorrow = []
 
 [morning]
 Hydrate = "None"
-Make_Bed = "None"
-Hang = "None"
-Face_Pulls = "None"
+Environment = "None"
+Shoulders = "None"
 Stretches = "None"
 Breathing = "None"
 Breakfast = "None"
+Shower = "None"
 Teeth = "None"
-Mental_Exercise = "None"
-Nature = "None"
+Puzzle = "None"
 
 [evening]
 Temperature = "None"

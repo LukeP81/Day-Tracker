@@ -1,14 +1,13 @@
 morning = [
     "Hydrate",
-    "Make Bed",
-    "Hang",
-    "Face Pulls",
+    "Environment",
+    "Shoulders",
     "Stretches",
     "Breathing",
     "Breakfast",
+    "Shower",
     "Teeth",
-    "Mental Exercise",
-    "Nature"
+    "Puzzle"
 ]
 
 evening = [
