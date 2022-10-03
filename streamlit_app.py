@@ -1,3 +1,5 @@
+"""The script for running the streamlit app"""
+
 import streamlit as st
 
 from cookie_tools import CookieTools

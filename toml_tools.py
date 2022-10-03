@@ -1,16 +1,23 @@
+"""Module for most things toml related"""
+
 from typing import List, Optional, Union
 
 import toml
 
 
 class TomlTools:
+    """Class containing useful toml functions"""
 
     @classmethod
     def get_date(cls) -> Optional[str]:
+        """Method for getting the date of current.toml"""
+
         return toml.load("current.toml").get("date", None)
 
     @classmethod
     def check_date(cls, date: str) -> bool:
+        """Method for checking if the date of current.toml matches"""
+
         # check if day is the same
         if cls.get_date() == date:
             return True
@@ -18,7 +25,11 @@ class TomlTools:
 
     @classmethod
     def create_current(cls, day: str, date: str) -> None:
+        """Method for creating a new version of current.toml"""
+
         def list_to_dict(action_list: List[str]) -> dict:
+            """Function for creating a suitable dictionary out of a list"""
+
             returning_dict = {}
             for action in action_list:
                 key = action.replace(" ", "_")
@@ -53,6 +64,7 @@ class TomlTools:
 
     @classmethod
     def get_flat_current_values(cls) -> list:
+        """Method for returning a flat list of all current.toml tasks"""
 
         def extract_nested_values(it):  # pylint:disable=invalid-name
             # https://stackoverflow.com/questions/46845464/cleaner-way-to-unpack-nested-dictionaries
@@ -72,6 +84,8 @@ class TomlTools:
 
     @classmethod
     def get_score(cls) -> int:
+        """Method for getting the score from current.toml"""
+
         score = 0
         values = cls.get_flat_current_values()
         for value in values:
@@ -80,7 +94,25 @@ class TomlTools:
         return score
 
     @classmethod
+    def get_action_value(cls, section: str, name: str) -> Union[int, str]:
+        """Method for getting a task value from current.toml"""
+
+        dicts = toml.load("current.toml")
+        return dicts[section][name]
+
+    @classmethod
+    def set_action_value(cls, section: str, name: str, value: Union[str, int]):
+        """Method for setting a task value in current.toml"""
+
+        dicts = toml.load("current.toml")
+        dicts[section][name] = value
+        with open("current.toml", "w") as file:
+            toml.dump(dicts, file)
+
+    @classmethod
     def set_all_action_values(cls, value: int):
+        """Method for setting all the task values in current.toml"""
+
         toml_data = toml.load("current.toml")
         for section in list(toml_data.keys()):
             if isinstance(toml_data[section], dict):
@@ -92,23 +124,15 @@ class TomlTools:
             toml.dump(toml_data, file)
 
     @classmethod
-    def get_action_value(cls, section: str, name: str) -> Union[int, str]:
-        dicts = toml.load("current.toml")
-        return dicts[section][name]
-
-    @classmethod
-    def set_action_value(cls, section: str, name: str, value: Union[str, int]):
-        dicts = toml.load("current.toml")
-        dicts[section][name] = value
-        with open("current.toml", "w") as file:
-            toml.dump(dicts, file)
-
-    @classmethod
     def get_planned_values(cls) -> list:
+        """Method for getting the planned tasks from planned.toml"""
+
         return toml.load("planned.toml")["tasks"]
 
     @classmethod
     def set_planned_values(cls, task_list: list):
+        """Method for setting the planned tasks in planned.toml"""
+
         toml_data = toml.load("planned.toml")
         toml_data["tasks"] = task_list
         with open("planned.toml", "w") as file:
@@ -116,10 +140,14 @@ class TomlTools:
 
     @classmethod
     def get_progress(cls) -> int:
+        """Method for getting the progress value from progress.toml"""
+
         return toml.load("progress.toml").get("progress", 0)
 
     @classmethod
     def set_progress(cls):
+        """Method for setting the progress value in progress.toml"""
+
         score = cls.get_score()
         total_score = len(cls.get_flat_current_values())
         multiplier = 1 + (0.01 * (score / total_score))

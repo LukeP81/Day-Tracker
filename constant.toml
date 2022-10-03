@@ -35,7 +35,7 @@ general = [
 ]
 
 [Wednesday]
-food = ["Chicken", "Chicken-Cooking"]
+food = ["Chicken", "Chicken"]
 general = [
     "Work", "Guitar", "Racing"
 ]
@@ -53,16 +53,16 @@ general = [
 ]
 
 [Saturday]
-food = ["Chicken", "Chilli - Cooking"]
+food = ["Chicken", "Chilli"]
 general = [
     "Work", "Guitar", "Racing"
 ]
 
 [Sunday]
-food = ["Spaghetti - Cooking", "Chicken-Cooking"]
+food = ["Chicken", "Spaghetti"]
 general = [
     "Laundry", "Work", "Guitar", "Racing"
 ]
 [Special]
 Breathing = ["w", "[Youtube](https://www.youtube.com/watch?v=tybOi4hjZFQ 'Breathing Exercise')"]
-Plan=["p"]
+Plan = ["p"]
