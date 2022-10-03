@@ -70,7 +70,7 @@ class UiComponents:
         """Method for displaying the UI for the score"""
 
         current_score = TomlTools.get_score()
-        total_score = len(TomlTools._get_flat_current_values())
+        total_score = TomlTools.get_total_score()
         st.slider(label="Score",
                   min_value=-total_score, max_value=total_score,
                   value=current_score)
