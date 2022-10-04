@@ -1,7 +1,6 @@
 """Module for most things UI related"""
 
 from datetime import datetime, timedelta
-import time
 
 import numpy as np
 import streamlit as st
@@ -107,46 +106,36 @@ class UiComponents:
             objective.display()
 
     @classmethod
+    def _check_log_exists(cls) -> bool:
+        """Method for checking that the log file exists"""
+
+        try:
+            with open(file="log.csv", mode="r", encoding="utf-8"):
+                return True
+        except FileNotFoundError:
+            return False
+
+    @classmethod
     @st.experimental_memo
-    def _get_data(cls, file_date: str):
+    def _get_data(cls, current_date: str):
         """Method for getting the data from current.toml"""
 
-        file_date.title()  # used for separating caching
-        with open(file="current.toml", mode="r", encoding="utf-8") as file:
+        _ = current_date  # used for separating caching
+        with open(file="log.csv", mode="r", encoding="utf-8") as file:
             return file.read()
 
     @classmethod
-    def _finish_day_display(cls, date: str):
-        """Method for displaying the UI after a day has finished"""
-
-        def downloading():
-            st.session_state["downloading"] = True
-
-        filename_date = date.replace("/", ",")
-
-        st.download_button(label="Download Log",
-                           data=cls._get_data(filename_date),
-                           file_name=f"log_{filename_date}.toml",
-                           mime="application/toml",
-                           key="downloader", on_click=downloading, )
-
-        if st.session_state.get("downloading", False):
-            with st.spinner(text="Generating log"):
-                time.sleep(1)
-            st.session_state["downloading"] = False
-            st.session_state["downloaded"] = True
-            st.experimental_rerun()
-
-    @classmethod
     def _same_day_display(cls, day: str, date: str):
-        """Method for displaying the UI if the day
-        is the same as the previous run"""
+        """Method for displaying the UI if the day is
+        the same as the previous run"""
 
         st.title(f"{day} {date}")
         cls._value_display()
         cls._score_display()
+
         with st.expander(label="Morning"):
             cls._create_objective_forms("morning")
+
         with st.expander(label="Specific"):
             general_tab, food_tab, planned_tab = st.tabs(
                 ["General", "Food", "Planned"])
@@ -156,8 +145,16 @@ class UiComponents:
                 cls._create_objective_forms("food")
             with planned_tab:
                 cls._create_objective_forms("planned")
+
         with st.expander(label="Evening"):
             cls._create_objective_forms("evening")
+
+        if cls._check_log_exists():
+            st.download_button(label="Download Log",
+                               data=cls._get_data(date),
+                               file_name=f"day_tracker_log.csv",
+                               mime="text/csv",
+                               key="downloader")
 
     @classmethod
     def _different_day_display(cls, current_day: str, current_date: str):
@@ -169,27 +166,21 @@ class UiComponents:
         if file_date is None:
             TomlTools.create_current(day=current_day, date=current_date)
             st.experimental_rerun()
-            return  # unneeded expect for IDE warning
 
-        if st.session_state.get("downloaded", False):
-            st.session_state["downloaded"] = False
-            TomlTools.set_progress()
-            file_datetime = datetime.strptime(
-                file_date, "%d/%m/%Y"
-            ) + timedelta(
-                days=1,
-                hours=12  # avoid bst errors
-            )
-            new_date = (file_datetime.strftime("%d/%m/%Y"))
-            new_day = file_datetime.strftime("%A")
-            TomlTools.create_current(day=new_day, date=new_date)
-            st.experimental_rerun()
-            return
-
+        st.title("Processing Log")
         TomlTools.set_all_action_values(value=-1)
-        st.title(f"Log date: {file_date}")
-        st.title(f"Current date: {current_date}")
-        cls._finish_day_display(date=file_date)
+        TomlTools.set_progress()
+        TomlTools.set_log_file()
+        file_datetime = datetime.strptime(
+            file_date, "%d/%m/%Y"
+        ) + timedelta(
+            days=1,
+            hours=12  # avoid bst errors
+        )
+        new_date = (file_datetime.strftime("%d/%m/%Y"))
+        new_day = file_datetime.strftime("%A")
+        TomlTools.create_current(day=new_day, date=new_date)
+        st.experimental_rerun()
 
     @classmethod
     def display(cls):

@@ -135,3 +135,7 @@ dmypy.json
 /.idea/vcs.xml
 /.idea/misc.xml
 /.idea/codeStyles/codeStyleConfig.xml
+/current.toml
+/log.csv
+/planned.toml
+/progress.toml

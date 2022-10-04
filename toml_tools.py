@@ -2,6 +2,7 @@
 
 from typing import List, Optional, Union, Tuple
 
+import pandas as pd
 import toml
 
 
@@ -9,10 +10,44 @@ class TomlTools:
     """Class containing useful toml functions"""
 
     @classmethod
+    def log_df_from_current(cls) -> pd.DataFrame:
+        """Method for creating a dataframe for the
+        log file from the current.toml file"""
+
+        toml_data = toml.load("current.toml")
+        log_dict = {
+                       "date": [toml_data.pop("date", "")]
+                   } | {
+                       f"{section_name}-{task_name}": [task_value]
+                       for section_name, section_dict in toml_data.items()
+                       for task_name, task_value in section_dict.items()
+                   }
+        log_dataframe = pd.DataFrame(data=log_dict)
+        return log_dataframe.set_index("date", drop=True)
+
+    @classmethod
+    def set_log_file(cls):
+        """Method for creating/updating the log file"""
+
+        log_dataframe = cls.log_df_from_current()
+        try:
+            existing_dataframe = pd.read_csv(filepath_or_buffer="log.csv",
+                                             index_col="date")
+        except FileNotFoundError:
+            log_dataframe.to_csv(path_or_buf="log.csv")
+            return
+        new_dataframe = pd.concat([existing_dataframe, log_dataframe],
+                                  join="outer")
+        new_dataframe.to_csv(path_or_buf="log.csv")
+
+    @classmethod
     def get_date(cls) -> Optional[str]:
         """Method for getting the date of current.toml"""
 
-        return toml.load("current.toml").get("date", None)
+        try:
+            return toml.load("current.toml").get("date", None)
+        except FileNotFoundError:
+            return None
 
     @classmethod
     def check_date(cls, date: str) -> bool:
@@ -44,7 +79,10 @@ class TomlTools:
         food_dict = list_to_dict(action_list=actions[day]["food"])
 
         # create dicts from planned actions, then wipe planned actions
-        actions = toml.load("planned.toml")
+        try:
+            actions = toml.load("planned.toml")
+        except FileNotFoundError:
+            actions = {"tasks": []}
         planned_dict = list_to_dict(action_list=actions["tasks"])
         with open(file="planned.toml", mode="w", encoding="utf-8") as file:
             toml.dump({"tasks": []}, file)
@@ -52,7 +90,6 @@ class TomlTools:
         # place dicts into toml file
         current_dict = {
             "date": date,
-            "tomorrow": [],
             "morning": morning_dict,
             "evening": evening_dict,
             "general": general_dict,
@@ -79,7 +116,6 @@ class TomlTools:
 
         dicts = toml.load("current.toml")
         _ = dicts.pop("date", None)
-        _ = dicts.pop("tomorrow", None)
         return list(extract_nested_values(dicts))
 
     @classmethod
@@ -133,7 +169,12 @@ class TomlTools:
     def get_planned_values(cls) -> list:
         """Method for getting the planned tasks from planned.toml"""
 
-        return toml.load("planned.toml")["tasks"]
+        try:
+            return toml.load("planned.toml")["tasks"]
+        except FileNotFoundError:
+            with open(file="planned.toml", mode="w", encoding="utf-8") as file:
+                toml.dump({"tasks": []}, file)
+            return []
 
     @classmethod
     def set_planned_values(cls, task_list: list):
@@ -147,9 +188,15 @@ class TomlTools:
     @classmethod
     def get_current_progress(cls) -> Tuple[float, float]:
         """Method for getting the current progress value from progress.toml"""
-        toml_data = toml.load("progress.toml")
-        current_value = toml_data.get("progress", 0)
-        current_delta = toml_data.get("delta", 0)
+
+        try:
+            toml_data = toml.load("progress.toml")
+        except FileNotFoundError:
+            toml_data = {"progress": 1, "delta": 0}
+            with open(file="progress.toml", mode="w", encoding="utf-8") as file:
+                toml.dump(toml_data, file)
+        current_value = toml_data["progress"]
+        current_delta = toml_data["delta"]
         return current_value, current_delta
 
     @classmethod
