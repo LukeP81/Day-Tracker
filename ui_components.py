@@ -152,7 +152,7 @@ class UiComponents:
         if cls._check_log_exists():
             st.download_button(label="Download Log",
                                data=cls._get_data(date),
-                               file_name=f"day_tracker_log.csv",
+                               file_name="day_tracker_log.csv",
                                mime="text/csv",
                                key="downloader")
 
