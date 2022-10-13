@@ -5,4 +5,14 @@ import streamlit as st
 from ui_components import UiComponents
 
 st.set_page_config(page_title="Day Tracker", page_icon="🗓️", layout="centered")
-UiComponents.display()
+try:
+    UiComponents.display()
+
+except BaseException as e:  # unsure of error, need to always have log
+    st.write(e)
+    with open(file="log.csv", mode="r", encoding="utf-8") as file:
+        st.download_button(label="Download Log",
+                           data=file.read(),
+                           file_name="day_tracker_log.csv",
+                           mime="text/csv",
+                           key="downloader")

@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-from toml_tools import TomlTools
+from utilities import Logs
 
 
 # pylint: disable=too-few-public-methods
@@ -14,7 +14,7 @@ class BasicObjective:
 
         self._section = section
         self._name = name
-        self._value = TomlTools.get_action_value(section=section, name=name)
+        self._value = Logs.get_action_value(section=section, name=name)
 
     def _extra_method(self):
         """Private method for subclassing,
@@ -33,14 +33,14 @@ class BasicObjective:
             medium = middle.form_submit_button(label="Undoable")
             bad = right.form_submit_button(label="Avoided")
         if good:
-            TomlTools.set_action_value(section=self._section, name=self._name,
-                                       value=1)
+            Logs.set_action_value(section=self._section, name=self._name,
+                                  value=1)
         elif medium:
-            TomlTools.set_action_value(section=self._section, name=self._name,
-                                       value=0)
+            Logs.set_action_value(section=self._section, name=self._name,
+                                  value=0)
         elif bad:
-            TomlTools.set_action_value(section=self._section, name=self._name,
-                                       value=-1)
+            Logs.set_action_value(section=self._section, name=self._name,
+                                  value=-1)
         if any([good, medium, bad]):
             st.experimental_rerun()
 
@@ -54,12 +54,12 @@ class BasicObjective:
             -1: st.error,
         }
         with message:
-            message_dict[self._value](self._name)
+            message_dict[int(self._value)](self._name)
         perform_undo = undo.button(label="Undo",
                                    key=f"undo_{self._section}_{self._name}")
         if perform_undo:
-            TomlTools.set_action_value(section=self._section, name=self._name,
-                                       value="None")
+            Logs.set_action_value(section=self._section, name=self._name,
+                                  value="None")
             st.experimental_rerun()
 
     def display(self):
@@ -105,17 +105,17 @@ class PlanObjective(BasicObjective):
 
         with st.form(key=f"{self._section}_{self._name}"):
             st.subheader(self._name)
-            current_planned = TomlTools.get_planned_values()
+            current_planned = Logs.get_planned_values()
             planned_string = "\n".join(current_planned)
             entered = st.text_area(label="Tomorrow's tasks",
                                    value=planned_string)
             submit = st.form_submit_button(label="Actioned")
 
         if submit:
-            TomlTools.set_action_value(section=self._section, name=self._name,
-                                       value=1)
+            Logs.set_action_value(section=self._section, name=self._name,
+                                  value=1)
             created_tasks = list(
                 {task for task in entered.split("\n") if task})
 
-            TomlTools.set_planned_values(task_list=created_tasks)
+            Logs.set_planned_values(task_list=created_tasks)
             st.experimental_rerun()
