@@ -48,18 +48,8 @@ class Logs:
         return day_dataframe.set_index("date", drop=True)
 
     @classmethod
-    def _update_log_file(cls, day: str, date: str,
-                         existing_dataframe: pd.DataFrame) -> None:
-        """Method for creating/updating the log file"""
-
-        day_dataframe = cls._create_day_dataframe(day=day, date=date)
-
-        new_dataframe = pd.concat([existing_dataframe, day_dataframe],
-                                  join="outer")
-        new_dataframe.to_csv(path_or_buf="log.csv")
-
-    @classmethod
     def _log_setup(cls) -> pd.DataFrame:
+        """Method for creating/getting the log file"""
 
         try:
             return pd.read_csv(filepath_or_buffer="log.csv",
@@ -72,15 +62,30 @@ class Logs:
             return cls._create_day_dataframe(day=day, date=date)
 
     @classmethod
+    def _update_log_file(cls, day: str, date: str,
+                         existing_dataframe: pd.DataFrame) -> None:
+        """Method for updating the log file"""
+
+        day_dataframe = cls._create_day_dataframe(day=day, date=date)
+
+        new_dataframe = pd.concat([existing_dataframe, day_dataframe],
+                                  join="outer")
+        new_dataframe.to_csv(path_or_buf="log.csv")
+
+    @classmethod
     def _get_min_date(cls, dataframe: pd.DataFrame) -> str:
+        """Method for getting the earliest date of the log file"""
         return dataframe.index[0]
 
     @classmethod
     def _get_max_date(cls, dataframe: pd.DataFrame) -> str:
+        """Method for getting the latest date of the log file"""
         return dataframe.index[-1]
 
     @classmethod
     def config(cls, day: str, date: str, ) -> str:
+        """Method for setting up the log file"""
+
         log_dataframe = cls._log_setup()
         if cls._get_max_date(dataframe=log_dataframe) != date:
             cls._update_log_file(day=day, date=date,
@@ -89,6 +94,7 @@ class Logs:
 
     @classmethod
     def set_date(cls, date: str) -> None:
+        """Method for setting the date to use"""
         cls.DATE = date
 
     @classmethod
@@ -99,7 +105,7 @@ class Logs:
     @classmethod
     def _get_score(cls, values: list) -> int:
         """Method for getting the score from current.toml"""
-        return sum([int(item) for item in values if item != "None"])
+        return sum(int(item) for item in values if item != "None")
 
     @classmethod
     def _get_start_progress(cls, dataframe: pd.DataFrame) -> Tuple[float, float]:
@@ -133,6 +139,8 @@ class Logs:
 
     @classmethod
     def basic_info(cls) -> dict:
+        """Method for returning basic info from the log file"""
+
         dataframe = pd.read_csv(filepath_or_buffer="log.csv",
                                 index_col="date")
         values = cls._get_values(dataframe=dataframe, date=cls.DATE)
@@ -147,6 +155,8 @@ class Logs:
 
     @classmethod
     def get_actions(cls) -> dict:
+        """Method for returning available tasks from the log file"""
+
         dataframe = pd.read_csv(filepath_or_buffer="log.csv",
                                 index_col="date")
         actions = list(dataframe.loc[cls.DATE].dropna().index)
@@ -166,7 +176,8 @@ class Logs:
 
     @classmethod
     def get_action_value(cls, section: str, name: str) -> Union[int, str]:
-        """Method for getting a task value from current.toml"""
+        """Method for getting a task value from the log file"""
+
         dataframe = pd.read_csv(filepath_or_buffer="log.csv",
                                 index_col="date")
         return dataframe.loc[cls.DATE][f"{section}-{name}"]
@@ -174,7 +185,8 @@ class Logs:
     @classmethod
     def set_action_value(cls, section: str, name: str,
                          value: Union[str, int]) -> None:
-        """Method for setting a task value in current.toml"""
+        """Method for setting a task value in the log file"""
+
         dataframe = pd.read_csv(filepath_or_buffer="log.csv",
                                 index_col="date")
         dataframe.at[cls.DATE, f"{section}-{name}"] = value

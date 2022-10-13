@@ -8,7 +8,8 @@ st.set_page_config(page_title="Day Tracker", page_icon="🗓️", layout="center
 try:
     UiComponents.display()
 
-except BaseException as e:  # unsure of error, need to always have log
+# unsure of error, need to always have log
+except BaseException as e:  # pylint:disable=broad-except
     st.write(e)
     with open(file="log.csv", mode="r", encoding="utf-8") as file:
         st.download_button(label="Download Log",

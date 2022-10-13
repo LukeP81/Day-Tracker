@@ -110,8 +110,7 @@ class UiComponents:
 
     @classmethod
     def _show_objectives(cls, day: str, date: str) -> None:
-        """Method for displaying the UI if the day is
-        the same as the previous run"""
+        """Method for displaying the central UI"""
 
         st.title(f"{day} {date}")
         info = Logs.basic_info()
@@ -135,11 +134,11 @@ class UiComponents:
         with st.expander(label="Evening"):
             cls._create_objective_forms(tasks=tasks, section="evening", )
 
-        st.download_button(label="Download Log",
-                           data=cls._get_data(),
-                           file_name="day_tracker_log.csv",
-                           mime="text/csv",
-                           key="downloader")
+        st.sidebar.download_button(label="Download Log",
+                                   data=cls._get_data(),
+                                   file_name="day_tracker_log.csv",
+                                   mime="text/csv",
+                                   key="downloader")
 
     @classmethod
     def display(cls) -> None:
