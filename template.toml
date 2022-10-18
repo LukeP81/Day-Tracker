@@ -1,34 +1,39 @@
-morning = ["Writes"]
+morning = ["Task1", "Task2", "Writes"]
 
-evening = ["Plan"]
+evening = ["Task3", "Task4", "Plan"]
 
 [Monday]
-food = []
-general = []
+food = ["Meal1", "Meal2"]
+general = ["Task5"]
 
 [Tuesday]
-food = []
-general = []
+food = ["Meal1", "Meal2"]
+general = ["Task5"]
 
 [Wednesday]
-food = []
-general = []
+food = ["Meal3", "Meal2"]
+general = ["Task6"]
 
 [Thursday]
-food = []
-general = []
+food = ["Meal1", "Meal2"]
+general = ["Task6"]
 
 [Friday]
-food = []
-general = []
+food = ["Meal1", "Meal2"]
+general = ["Task6", "Task7"]
 
 [Saturday]
-food = []
-general = []
+food = ["Meal3", "Meal2"]
+general = ["Task6", "Task7"]
 
 [Sunday]
-food = []
-general = []
+food = ["Meal1", "Meal2"]
+general = ["Task6", "Task7"]
+
 [Special]
-Writes = ["w", "This writes a string"]
+#Give tasks extra details/actions by assigning a list to them
+
+# Write a markdown string under a task with ["w","your_string"]
+Writes = ["w", "This is the outputted string"]
+# Plan one time events for tomorrow with ["p"], this task name should not be duplicated
 Plan = ["p"]
