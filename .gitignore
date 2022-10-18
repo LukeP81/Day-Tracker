@@ -139,3 +139,7 @@ dmypy.json
 /log.csv
 /planned.toml
 /progress.toml
+/constant.toml
+/test@localhost.com_constant.toml
+/test@localhost.com_log.csv
+/test@localhost.com_planned.toml
