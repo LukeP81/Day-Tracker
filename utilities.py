@@ -119,7 +119,7 @@ class Logs:
 
     @classmethod
     def _get_values(cls, dataframe: pd.DataFrame, date: str) -> list:
-        """Method for returning a flat list of all task values from a given date"""
+        """Method for returning a list of all task values from a given date"""
         return [item for item in list(dataframe.loc[date]) if not pd.isnull(item)]
 
     @classmethod
