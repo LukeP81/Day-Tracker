@@ -6,11 +6,6 @@ from filenames import log_file
 from ui_components import UiComponents
 
 st.set_page_config(page_title="Day Tracker", page_icon="🗓️", layout="centered")
-
-if st.experimental_user["email"] is None:
-    st.header("Please log in to streamlit to continue")
-    st.stop()
-
 try:
     UiComponents.display()
 
