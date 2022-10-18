@@ -1,0 +1,34 @@
+morning = ["Writes"]
+
+evening = ["Plan"]
+
+[Monday]
+food = []
+general = []
+
+[Tuesday]
+food = []
+general = []
+
+[Wednesday]
+food = []
+general = []
+
+[Thursday]
+food = []
+general = []
+
+[Friday]
+food = []
+general = []
+
+[Saturday]
+food = []
+general = []
+
+[Sunday]
+food = []
+general = []
+[Special]
+Writes = ["w", "This writes a string"]
+Plan = ["p"]
